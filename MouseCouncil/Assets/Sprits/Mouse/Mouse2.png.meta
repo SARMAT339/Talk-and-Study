@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: 2360954899389414c904d5d592d6e577
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1177013875623287103
+    second: Mouse2_0
+  - first:
+      213: -643058049253400933
+    second: Mouse2_1
+  - first:
+      213: 1842630836305872285
+    second: Mouse2_2
+  - first:
+      213: 9123111292179106414
+    second: Mouse2_3
+  - first:
+      213: -168600833368435713
+    second: Mouse2_4
+  - first:
+      213: 1158113863419836583
+    second: Mouse2_5
+  - first:
+      213: 6654976913839206105
+    second: Mouse2_6
+  - first:
+      213: -8358193465342652897
+    second: Mouse2_7
+  - first:
+      213: 7414438357263327226
+    second: Mouse2_8
+  - first:
+      213: -5330510620646141985
+    second: Mouse2_9
+  - first:
+      213: -4586188371435583849
+    second: Mouse2_10
+  - first:
+      213: 2076350629468965503
+    second: Mouse2_11
+  - first:
+      213: -6287559995641232196
+    second: Mouse2_12
+  - first:
+      213: 850115325379212167
+    second: Mouse2_13
+  - first:
+      213: -7940982420343790041
+    second: Mouse2_14
+  - first:
+      213: -2498566874954151579
+    second: Mouse2_15
+  - first:
+      213: 567312534680214176
+    second: Mouse2_16
+  - first:
+      213: 9058561730462529982
+    second: Mouse2_17
+  - first:
+      213: 4379199882697777647
+    second: Mouse2_18
+  - first:
+      213: -105927151222499051
+    second: Mouse2_19
+  - first:
+      213: 1608407577495811108
+    second: Mouse2_20
+  - first:
+      213: 7923556401209588972
+    second: Mouse2_21
+  - first:
+      213: 8922984653913063323
+    second: Mouse2_22
+  - first:
+      213: 685506019617154905
+    second: Mouse2_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mouse2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 623
+        width: 152
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c6a4cfbd186aafe0800000000000000
+      internalID: -1177013875623287103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_1
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 622
+        width: 142
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9e9b4c7c166317f0800000000000000
+      internalID: -643058049253400933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_2
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 623
+        width: 157
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d954132abf6529910800000000000000
+      internalID: 1842630836305872285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_3
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 623
+        width: 157
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6ac0b8426dcb9e70800000000000000
+      internalID: 9123111292179106414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_4
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 625
+        width: 147
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff35d327f6209adf0800000000000000
+      internalID: -168600833368435713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_5
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 623
+        width: 158
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a8389e3c62721010800000000000000
+      internalID: 1158113863419836583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 426
+        width: 159
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9deafc95e3a3b5c50800000000000000
+      internalID: 6654976913839206105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_7
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 423
+        width: 143
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1e824ea35bb10c80800000000000000
+      internalID: -8358193465342652897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_8
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 423
+        width: 150
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aff16bd076065e660800000000000000
+      internalID: 7414438357263327226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_9
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 422
+        width: 149
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdf80f035d83606b0800000000000000
+      internalID: -5330510620646141985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_10
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 422
+        width: 145
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7960e8f89f59a50c0800000000000000
+      internalID: -4586188371435583849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_11
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 425
+        width: 157
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7a08a285eda0dc10800000000000000
+      internalID: 2076350629468965503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 222
+        width: 160
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb409d33f791eb8a0800000000000000
+      internalID: -6287559995641232196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_13
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 224
+        width: 151
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 783f75362673ccb00800000000000000
+      internalID: 850115325379212167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_14
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 223
+        width: 157
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72669c3df86fbc190800000000000000
+      internalID: -7940982420343790041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_15
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 223
+        width: 150
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 569ccca4aae435dd0800000000000000
+      internalID: -2498566874954151579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_16
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 222
+        width: 149
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aa9d3a9ebf7fd700800000000000000
+      internalID: 567312534680214176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_17
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 224
+        width: 155
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb9ba2846e976bd70800000000000000
+      internalID: 9058561730462529982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_18
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 148
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe122a0671b06cc30800000000000000
+      internalID: 4379199882697777647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_19
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0
+        width: 150
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 519505331dba78ef0800000000000000
+      internalID: -105927151222499051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_20
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 0
+        width: 151
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4243fa68b26325610800000000000000
+      internalID: 1608407577495811108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_21
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 0
+        width: 151
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cecbedbe09026fd60800000000000000
+      internalID: 7923556401209588972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_22
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 0
+        width: 169
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9fffb8444fc4db70800000000000000
+      internalID: 8922984653913063323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse2_23
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 2
+        width: 147
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9572ca6c718638900800000000000000
+      internalID: 685506019617154905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Mouse2_0: -1177013875623287103
+      Mouse2_1: -643058049253400933
+      Mouse2_10: -4586188371435583849
+      Mouse2_11: 2076350629468965503
+      Mouse2_12: -6287559995641232196
+      Mouse2_13: 850115325379212167
+      Mouse2_14: -7940982420343790041
+      Mouse2_15: -2498566874954151579
+      Mouse2_16: 567312534680214176
+      Mouse2_17: 9058561730462529982
+      Mouse2_18: 4379199882697777647
+      Mouse2_19: -105927151222499051
+      Mouse2_2: 1842630836305872285
+      Mouse2_20: 1608407577495811108
+      Mouse2_21: 7923556401209588972
+      Mouse2_22: 8922984653913063323
+      Mouse2_23: 685506019617154905
+      Mouse2_3: 9123111292179106414
+      Mouse2_4: -168600833368435713
+      Mouse2_5: 1158113863419836583
+      Mouse2_6: 6654976913839206105
+      Mouse2_7: -8358193465342652897
+      Mouse2_8: 7414438357263327226
+      Mouse2_9: -5330510620646141985
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
