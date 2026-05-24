@@ -10,6 +10,11 @@ public class BellController : MonoBehaviour
     public float force = 10f;
     public float randomOffset = 0.2f;
 
+    [HideInInspector]
+    public BellSpawner spawner;
+
+    private bool wasThrown = false;
+
     void Start()
     {
         rb.isKinematic = true;
@@ -18,9 +23,14 @@ public class BellController : MonoBehaviour
 
     void Update()
     {
+        if (wasThrown)
+            return;
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(
+                Mouse.current.position.ReadValue()
+            );
 
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
@@ -33,24 +43,26 @@ public class BellController : MonoBehaviour
 
     void Throw()
     {
+        wasThrown = true;
+
         rb.isKinematic = false;
 
-        // точка ВНУТРИ области вокруг targetArea
         Vector2 randomTarget = (Vector2)targetArea.position + new Vector2(
             Random.Range(-randomOffset, randomOffset),
             Random.Range(-randomOffset, randomOffset)
         );
 
-        // направление
-        Vector2 direction = (randomTarget - (Vector2)transform.position);
+        Vector2 direction =
+            (randomTarget - (Vector2)transform.position).normalized;
 
-        // нормализуем НЕ обязательно (важно!)
-        // если хочешь стабильную силу — оставь normalized
-        direction = direction.normalized;
-
-        // лёгкая дуга
         direction += Vector2.up * 0.5f;
 
         rb.linearVelocity = direction * force;
+
+        // �������� �������� ��� ��� ������
+        if (spawner != null)
+        {
+            spawner.OnBellThrown();
+        }
     }
 }
