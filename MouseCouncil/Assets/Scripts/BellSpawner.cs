@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class BellSpawner : MonoBehaviour
@@ -10,45 +9,49 @@ public class BellSpawner : MonoBehaviour
     public Transform spawnPoint;
     public Transform targetArea;
 
-    [Header("Settings")]
-    public int maxBells = 3;
-    public float spawnDelay = 1.5f;
+    private GameManager gameManager;
 
-    private int currentBell = 0;
-
-    void Start()
+    public void Initialize(GameManager manager)
     {
-        SpawnBell();
-    }
+        gameManager = manager;
 
-    public void OnBellThrown()
-    {
-        currentBell++;
-
-        if (currentBell < maxBells)
+        if (bellPrefab == null)
         {
-            StartCoroutine(SpawnWithDelay());
+            GameObject sceneBell = GameObject.Find("Bell_0");
+            if (sceneBell != null)
+                bellPrefab = sceneBell;
         }
+
+        if (spawnPoint == null && bellPrefab != null)
+            spawnPoint = bellPrefab.transform;
     }
 
-    IEnumerator SpawnWithDelay()
+    public BellController SpawnBellForTurn()
     {
-        yield return new WaitForSeconds(spawnDelay);
+        if (bellPrefab == null || spawnPoint == null)
+            return null;
 
-        SpawnBell();
-    }
-
-    void SpawnBell()
-    {
-        GameObject newBell = Instantiate(
-            bellPrefab,
-            spawnPoint.position,
-            Quaternion.identity
-        );
+        Vector3 position = spawnPoint.position;
+        GameObject newBell = Instantiate(bellPrefab, position, Quaternion.identity);
+        newBell.SetActive(true);
 
         BellController bell = newBell.GetComponent<BellController>();
+        if (bell == null)
+            return null;
 
-        bell.targetArea = targetArea;
+        if (targetArea != null)
+            bell.targetArea = targetArea;
+        else if (gameManager != null && gameManager.catTarget != null)
+            bell.targetArea = gameManager.catTarget;
+
         bell.spawner = this;
+        bell.gameManager = gameManager;
+        bell.PrepareForSpawn();
+
+        ThrowableObject throwable = newBell.GetComponent<ThrowableObject>();
+        if (throwable != null)
+            throwable.SetBellController(bell);
+
+        return bell;
     }
 }

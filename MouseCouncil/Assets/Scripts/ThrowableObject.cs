@@ -2,25 +2,35 @@ using UnityEngine;
 
 public class ThrowableObject : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Если столкнулся с объектом с тегом "CAT"
-        if (collision.gameObject.CompareTag("CAT"))
-        {
-            Debug.Log("Столкновение с LogObject");
-        }
+    private BellController bellController;
 
-        // Если столкнулся с объектом с тегом "Disable"
-        if (collision.gameObject.CompareTag("Disable"))
-        {
-            Debug.Log("Столкновение с DisableObject, отключение через 2 секунды");
-            StartCoroutine(DisableAfterDelay(2f));
-        }
+    public void SetBellController(BellController controller)
+    {
+        bellController = controller;
     }
 
-    private System.Collections.IEnumerator DisableAfterDelay(float delay)
+    void Awake()
     {
-        yield return new WaitForSeconds(delay);
-        gameObject.SetActive(false);
+        if (bellController == null)
+            bellController = GetComponent<BellController>();
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (bellController == null || !bellController.WasThrown)
+            return;
+
+        if (collision.gameObject.CompareTag("CAT"))
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.OnBellHitCat(bellController);
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("Disable"))
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.OnBellMissed(bellController);
+        }
     }
 }

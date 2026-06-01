@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class BellController : MonoBehaviour
 {
     public Rigidbody2D rb;
@@ -13,38 +14,55 @@ public class BellController : MonoBehaviour
     [HideInInspector]
     public BellSpawner spawner;
 
-    private bool wasThrown = false;
+    [HideInInspector]
+    public GameManager gameManager;
 
-    void Start()
+    private bool canThrow;
+    private bool wasThrown;
+
+    public bool WasThrown => wasThrown;
+
+    void Awake()
     {
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void PrepareForSpawn()
+    {
+        wasThrown = false;
+        canThrow = false;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
         rb.isKinematic = true;
         rb.gravityScale = 1f;
     }
 
+    public void SetThrowEnabled(bool enabled)
+    {
+        canThrow = enabled && !wasThrown;
+    }
+
     void Update()
     {
-        if (wasThrown)
+        if (!canThrow || wasThrown)
             return;
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(
-                Mouse.current.position.ReadValue()
-            );
+        if (!WasScreenPressed())
+            return;
 
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+        Vector2 screenPos = GetScreenPosition();
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-            if (hit.collider != null && hit.collider.gameObject == gameObject)
-            {
-                Throw();
-            }
-        }
+        if (hit.collider != null && hit.collider.gameObject == gameObject)
+            Throw();
     }
 
     void Throw()
     {
         wasThrown = true;
-
+        canThrow = false;
         rb.isKinematic = false;
 
         Vector2 randomTarget = (Vector2)targetArea.position + new Vector2(
@@ -52,17 +70,35 @@ public class BellController : MonoBehaviour
             Random.Range(-randomOffset, randomOffset)
         );
 
-        Vector2 direction =
-            (randomTarget - (Vector2)transform.position).normalized;
-
+        Vector2 direction = (randomTarget - (Vector2)transform.position).normalized;
         direction += Vector2.up * 0.5f;
-
         rb.linearVelocity = direction * force;
 
-        // сообщаем спавнеру что был бросок
-        if (spawner != null)
-        {
-            spawner.OnBellThrown();
-        }
+        if (gameManager != null)
+            gameManager.OnBellThrown(this);
+    }
+
+    static bool WasScreenPressed()
+    {
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            return true;
+
+        if (Touchscreen.current != null &&
+            Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+            return true;
+
+        return false;
+    }
+
+    static Vector2 GetScreenPosition()
+    {
+        if (Touchscreen.current != null &&
+            Touchscreen.current.primaryTouch.press.isPressed)
+            return Touchscreen.current.primaryTouch.position.ReadValue();
+
+        if (Mouse.current != null)
+            return Mouse.current.position.ReadValue();
+
+        return Vector2.zero;
     }
 }

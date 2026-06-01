@@ -1,55 +1,54 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
     public float moveDuration = 2f;
+    public Vector3 startPosition = new Vector3(-19.2f, 0f, -10f);
+    public Vector3 gamePosition = new Vector3(0f, 0f, -10f);
 
-    private bool isMoving = false;
-    private Vector3 targetPosition;
+    private bool isMoving;
 
-    void Start()
+    void Awake()
     {
-        targetPosition = new Vector3(0f, 0f, -10f);
+        transform.position = startPosition;
     }
 
-    void Update()
+    public void SnapToStart()
     {
-        // Проверка клика мыши
-        if (Mouse.current.leftButton.wasPressedThisFrame && !isMoving)
-        {
-            StartCoroutine(MoveCamera());
-        }
-
-        // Проверка тапа (мобильные)
-        if (Touchscreen.current != null &&
-            Touchscreen.current.primaryTouch.press.wasPressedThisFrame &&
-            !isMoving)
-        {
-            StartCoroutine(MoveCamera());
-        }
+        StopAllCoroutines();
+        isMoving = false;
+        transform.position = startPosition;
     }
 
-    IEnumerator MoveCamera()
+    public void MoveToGame()
+    {
+        if (!isMoving)
+            StartCoroutine(MoveRoutine(gamePosition));
+    }
+
+    public IEnumerator MoveToStartRoutine()
+    {
+        yield return MoveRoutine(startPosition);
+    }
+
+    IEnumerator MoveRoutine(Vector3 target)
     {
         isMoving = true;
 
-        Vector3 startPos = transform.position;
+        Vector3 from = transform.position;
         float time = 0f;
 
         while (time < moveDuration)
         {
             float t = time / moveDuration;
             t = Mathf.SmoothStep(0f, 1f, t);
-
-            transform.position = Vector3.Lerp(startPos, targetPosition, t);
-
+            transform.position = Vector3.Lerp(from, target, t);
             time += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = targetPosition;
+        transform.position = target;
         isMoving = false;
     }
 }

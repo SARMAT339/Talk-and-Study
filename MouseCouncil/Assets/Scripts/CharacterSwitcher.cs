@@ -11,8 +11,17 @@ public class CharacterSwitcher : MonoBehaviour
 
     private bool isStarted = false;
 
+    void Awake()
+    {
+        if (FindFirstObjectByType<GameManager>() != null)
+            enabled = false;
+    }
+
     void Update()
     {
+        if (!enabled)
+            return;
+
         if (!isStarted)
         {
             if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
