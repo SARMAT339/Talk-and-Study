@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public enum GamePhase
     {
+        MainMenu,
+        About,
         StartScreen,
         Intro,
         Playing,
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviour
     public float throwResolveTimeout = 6f;
     public float missSettleDelay = 1.5f;
 
-    private GamePhase phase = GamePhase.StartScreen;
+    private GamePhase phase = GamePhase.MainMenu;
     private int currentMouseIndex;
     private int throwsCompleted;
     private bool hasWon;
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviour
     private GameObject resultPanel;
     private TextMeshProUGUI resultText;
     private GameObject restartHintText;
+    private GameObject resultMenuButton;
+    private SoundsController soundsController;
 
     void Awake()
     {
@@ -55,6 +59,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        soundsController = GetComponent<SoundsController>();
         DisableLegacyMouseControllers();
         AutoFindReferences();
         SetupMiceAgents();
@@ -78,13 +83,16 @@ public class GameManager : MonoBehaviour
         if (bellSpawner != null)
             bellSpawner.Initialize(this);
 
-        ShowStartUI(true);
         HideResultUI();
+        EnterMainMenu();
     }
 
     void Update()
     {
         if (inputLocked || phase == GamePhase.Ending)
+            return;
+
+        if (phase == GamePhase.MainMenu || phase == GamePhase.About)
             return;
 
         if (!WasScreenPressed())
@@ -282,7 +290,103 @@ public class GameManager : MonoBehaviour
 
         restartHintText.AddComponent<StartTextAnimation>();
 
+        resultMenuButton = CreateResultButton(
+            resultPanel.transform,
+            "Вернуться в меню",
+            new Vector2(0.22f, 0.34f),
+            new Vector2(0.78f, 0.48f),
+            uiFont,
+            ReturnToMainMenu
+        );
+
         HideResultUI();
+    }
+
+    GameObject CreateResultButton(
+        Transform parent,
+        string label,
+        Vector2 anchorMin,
+        Vector2 anchorMax,
+        TMP_FontAsset font,
+        UnityEngine.Events.UnityAction onClick)
+    {
+        GameObject buttonObject = new GameObject("ResultMenuButton");
+        buttonObject.transform.SetParent(parent, false);
+
+        RectTransform rect = buttonObject.AddComponent<RectTransform>();
+        rect.anchorMin = anchorMin;
+        rect.anchorMax = anchorMax;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image image = buttonObject.AddComponent<Image>();
+        image.color = new Color(0.2f, 0.55f, 0.25f, 1f);
+
+        Button button = buttonObject.AddComponent<Button>();
+        button.targetGraphic = image;
+        button.onClick.AddListener(onClick);
+
+        GameObject textObject = new GameObject("Text");
+        textObject.transform.SetParent(buttonObject.transform, false);
+
+        RectTransform textRect = textObject.AddComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+
+        TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
+        text.text = label;
+        text.fontSize = 30;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = Color.white;
+        if (font != null)
+            text.font = font;
+
+        return buttonObject;
+    }
+
+    public void EnterMainMenu()
+    {
+        ResetGameplayState();
+        phase = GamePhase.MainMenu;
+        ShowStartUI(false);
+        HideResultUI();
+
+        if (MenuUI.Instance != null)
+            MenuUI.Instance.ShowMainMenu();
+    }
+
+    public void EnterStartScreen()
+    {
+        ResetGameplayState();
+        phase = GamePhase.StartScreen;
+
+        if (MenuUI.Instance != null)
+            MenuUI.Instance.HideAll();
+
+        ShowStartUI(true);
+        HideResultUI();
+    }
+
+    public void EnterAboutScreen()
+    {
+        phase = GamePhase.About;
+        ShowStartUI(false);
+        HideResultUI();
+
+        if (MenuUI.Instance != null)
+            MenuUI.Instance.ShowAbout();
+    }
+
+    public void ReturnToMainMenu()
+    {
+        EnterMainMenu();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 
     void BeginIntro()
@@ -332,6 +436,7 @@ public class GameManager : MonoBehaviour
         currentMouseIndex = 0;
         throwsCompleted = 0;
         hasWon = false;
+        soundsController?.StartMouseChatter();
         StartTurn();
     }
 
@@ -470,6 +575,7 @@ public class GameManager : MonoBehaviour
     IEnumerator FinishGameRoutine(bool won)
     {
         phase = GamePhase.Ending;
+        soundsController?.StopMouseChatter();
         inputLocked = true;
         waitingThrowResult = false;
 
@@ -515,8 +621,13 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        EnterStartScreen();
+    }
+
+    void ResetGameplayState()
+    {
         StopAllCoroutines();
-        phase = GamePhase.StartScreen;
+        soundsController?.StopMouseChatter();
         currentMouseIndex = 0;
         throwsCompleted = 0;
         hasWon = false;
@@ -528,9 +639,6 @@ public class GameManager : MonoBehaviour
             Destroy(activeBell.gameObject);
             activeBell = null;
         }
-
-        HideResultUI();
-        ShowStartUI(true);
 
         if (cameraMove != null)
             cameraMove.SnapToStart();
@@ -561,6 +669,9 @@ public class GameManager : MonoBehaviour
 
         if (restartHintText != null)
             restartHintText.SetActive(true);
+
+        if (resultMenuButton != null)
+            resultMenuButton.SetActive(true);
     }
 
     void HideResultUI()
@@ -570,6 +681,9 @@ public class GameManager : MonoBehaviour
 
         if (restartHintText != null)
             restartHintText.SetActive(false);
+
+        if (resultMenuButton != null)
+            resultMenuButton.SetActive(false);
     }
 
     Vector3 GetBellApproachPosition(int mouseIndex)
