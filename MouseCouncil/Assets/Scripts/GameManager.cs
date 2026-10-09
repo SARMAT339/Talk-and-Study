@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Настройки")]
     public int maxThrows = 3;
+    public int[] scoreByAttempt = { 5, 3, 1 };
     public float endDelay = 2f;
     public float throwResolveTimeout = 6f;
     public float missSettleDelay = 1.5f;
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
     private GamePhase phase = GamePhase.MainMenu;
     private int currentMouseIndex;
     private int throwsCompleted;
+    private int roundScore;
     private bool hasWon;
     private bool waitingThrowResult;
     private bool inputLocked;
@@ -46,6 +49,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject resultPanel;
     private TextMeshProUGUI resultText;
+    private GameObject scoreHudObject;
+    private TextMeshProUGUI scoreHudText;
     private GameObject restartHintText;
     private GameObject resultMenuButton;
     private SoundsController soundsController;
@@ -63,6 +68,7 @@ public class GameManager : MonoBehaviour
         DisableLegacyMouseControllers();
         AutoFindReferences();
         SetupMiceAgents();
+        SetupScoreHUD();
         SetupResultUI();
     }
 
@@ -100,7 +106,8 @@ public class GameManager : MonoBehaviour
 
         if (phase == GamePhase.Result)
         {
-            RestartGame();
+            if (!IsPointerOverResultButton())
+                RestartGame();
             return;
         }
 
@@ -223,6 +230,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void SetupScoreHUD()
+    {
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null)
+            return;
+
+        scoreHudObject = new GameObject("ScoreHUD");
+        scoreHudObject.transform.SetParent(canvas.transform, false);
+
+        RectTransform rect = scoreHudObject.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.62f, 0.88f);
+        rect.anchorMax = new Vector2(0.96f, 0.97f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        scoreHudText = scoreHudObject.AddComponent<TextMeshProUGUI>();
+        scoreHudText.alignment = TextAlignmentOptions.Center;
+        scoreHudText.fontSize = 28;
+        scoreHudText.color = Color.white;
+        scoreHudText.raycastTarget = false;
+
+        if (startHintText != null)
+        {
+            TMP_FontAsset uiFont = startHintText.GetComponent<TextMeshProUGUI>()?.font;
+            if (uiFont != null)
+                scoreHudText.font = uiFont;
+        }
+
+        scoreHudObject.SetActive(false);
+    }
+
     void SetupResultUI()
     {
         Canvas canvas = FindFirstObjectByType<Canvas>();
@@ -255,6 +293,7 @@ public class GameManager : MonoBehaviour
         resultText.alignment = TextAlignmentOptions.Center;
         resultText.fontSize = 42;
         resultText.color = Color.white;
+        resultText.raycastTarget = false;
         resultText.text = "";
 
         TMP_FontAsset uiFont = null;
@@ -277,6 +316,7 @@ public class GameManager : MonoBehaviour
         hintLabel.alignment = TextAlignmentOptions.Center;
         hintLabel.fontSize = 50;
         hintLabel.color = Color.white;
+        hintLabel.raycastTarget = false;
         hintLabel.text = "нажми, чтобы начать";
         if (startHintText != null)
         {
@@ -435,8 +475,10 @@ public class GameManager : MonoBehaviour
         inputLocked = false;
         currentMouseIndex = 0;
         throwsCompleted = 0;
+        roundScore = 0;
         hasWon = false;
         soundsController?.StartMouseChatter();
+        RefreshScoreHUD();
         StartTurn();
     }
 
@@ -513,6 +555,7 @@ public class GameManager : MonoBehaviour
             return;
 
         hasWon = true;
+        roundScore = GetScoreForAttempt(throwsCompleted + 1);
         waitingThrowResult = false;
         inputLocked = true;
 
@@ -561,6 +604,7 @@ public class GameManager : MonoBehaviour
 
         throwsCompleted++;
         currentMouseIndex++;
+        RefreshScoreHUD();
 
         if (throwsCompleted >= maxThrows)
         {
@@ -630,6 +674,7 @@ public class GameManager : MonoBehaviour
         soundsController?.StopMouseChatter();
         currentMouseIndex = 0;
         throwsCompleted = 0;
+        roundScore = 0;
         hasWon = false;
         waitingThrowResult = false;
         inputLocked = false;
@@ -651,6 +696,8 @@ public class GameManager : MonoBehaviour
 
         if (sceneBell != null)
             sceneBell.SetActive(false);
+
+        RefreshScoreHUD();
     }
 
     void ShowStartUI(bool show)
@@ -661,11 +708,19 @@ public class GameManager : MonoBehaviour
 
     void ShowResultUI(bool won)
     {
+        if (scoreHudObject != null)
+            scoreHudObject.SetActive(false);
+
         if (resultPanel != null)
             resultPanel.SetActive(true);
 
         if (resultText != null)
-            resultText.text = won ? "Вы выиграли!" : "Вы проиграли!";
+        {
+            if (won)
+                resultText.text = $"Вы выиграли!\n\n{FormatScore(roundScore)}";
+            else
+                resultText.text = $"Вы проиграли!\n\n{FormatScore(0)}";
+        }
 
         if (restartHintText != null)
             restartHintText.SetActive(true);
@@ -684,6 +739,51 @@ public class GameManager : MonoBehaviour
 
         if (resultMenuButton != null)
             resultMenuButton.SetActive(false);
+    }
+
+    void RefreshScoreHUD()
+    {
+        if (scoreHudObject == null || scoreHudText == null)
+            return;
+
+        bool show = phase == GamePhase.Playing && !hasWon && throwsCompleted < maxThrows;
+        scoreHudObject.SetActive(show);
+
+        if (!show)
+            return;
+
+        int attempt = throwsCompleted + 1;
+        int points = GetScoreForAttempt(attempt);
+        scoreHudText.text = $"Попытка {attempt}/{maxThrows}\n{FormatScore(points)}";
+    }
+
+    int GetScoreForAttempt(int attemptNumber)
+    {
+        if (attemptNumber < 1 || scoreByAttempt == null || scoreByAttempt.Length == 0)
+            return 0;
+
+        int index = attemptNumber - 1;
+        if (index >= scoreByAttempt.Length)
+            return scoreByAttempt[scoreByAttempt.Length - 1];
+
+        return scoreByAttempt[index];
+    }
+
+    static string FormatScore(int score)
+    {
+        int abs = Mathf.Abs(score);
+        int lastTwo = abs % 100;
+        int last = abs % 10;
+
+        if (lastTwo >= 11 && lastTwo <= 19)
+            return $"{score} баллов";
+
+        return last switch
+        {
+            1 => $"{score} балл",
+            2 or 3 or 4 => $"{score} балла",
+            _ => $"{score} баллов"
+        };
     }
 
     Vector3 GetBellApproachPosition(int mouseIndex)
@@ -713,6 +813,24 @@ public class GameManager : MonoBehaviour
         if (Touchscreen.current != null &&
             Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
             return true;
+
+        return false;
+    }
+
+    static bool IsPointerOverResultButton()
+    {
+        if (EventSystem.current == null)
+            return false;
+
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            return EventSystem.current.IsPointerOverGameObject();
+
+        if (Touchscreen.current != null &&
+            Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+        {
+            int touchId = Touchscreen.current.primaryTouch.touchId.ReadValue();
+            return EventSystem.current.IsPointerOverGameObject(touchId);
+        }
 
         return false;
     }

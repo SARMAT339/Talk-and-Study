@@ -255,7 +255,7 @@ Transform:
   m_GameObject: {fileID: 376475786}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -766,7 +766,7 @@ Transform:
   m_GameObject: {fileID: 690149383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.45, y: -3.6, z: -0.2}
+  m_LocalPosition: {x: -15.45, y: -3.6, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2765,6 +2765,7 @@ MonoBehaviour:
   startHintText: {fileID: 1731844400}
   sceneBell: {fileID: 1328860172}
   maxThrows: 3
+  scoreByAttempt: 050000000300000001000000
   endDelay: 2
   throwResolveTimeout: 6
   missSettleDelay: 1.5
