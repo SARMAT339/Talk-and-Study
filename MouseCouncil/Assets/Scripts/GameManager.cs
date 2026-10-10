@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     {
         MainMenu,
         About,
+        ListeningTale,
         StartScreen,
         Intro,
         Playing,
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
     private GameObject restartHintText;
     private GameObject resultMenuButton;
     private SoundsController soundsController;
+
+    public SoundsController Sounds => soundsController;
 
     void Awake()
     {
@@ -98,7 +101,7 @@ public class GameManager : MonoBehaviour
         if (inputLocked || phase == GamePhase.Ending)
             return;
 
-        if (phase == GamePhase.MainMenu || phase == GamePhase.About)
+        if (phase == GamePhase.MainMenu || phase == GamePhase.About || phase == GamePhase.ListeningTale)
             return;
 
         if (!WasScreenPressed())
@@ -419,6 +422,38 @@ public class GameManager : MonoBehaviour
             MenuUI.Instance.ShowAbout();
     }
 
+    public void EnterTaleScreen()
+    {
+        ResetGameplayState();
+        phase = GamePhase.ListeningTale;
+        ShowStartUI(false);
+        HideResultUI();
+
+        if (MenuUI.Instance != null)
+            MenuUI.Instance.ShowTale();
+
+        if (cameraMove != null)
+            cameraMove.MoveToTale();
+
+        soundsController?.PlayTale();
+    }
+
+    public void ToggleTalePlayback()
+    {
+        if (soundsController == null)
+            return;
+
+        if (soundsController.IsTalePlaying)
+            soundsController.PauseTale();
+        else
+            soundsController.ResumeTale();
+    }
+
+    public void RestartTale()
+    {
+        soundsController?.PlayTale();
+    }
+
     public void ReturnToMainMenu()
     {
         EnterMainMenu();
@@ -672,6 +707,7 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
         soundsController?.StopMouseChatter();
+        soundsController?.StopTale();
         currentMouseIndex = 0;
         throwsCompleted = 0;
         roundScore = 0;

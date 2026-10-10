@@ -6,6 +6,7 @@ public class CameraMove : MonoBehaviour
     public float moveDuration = 2f;
     public Vector3 startPosition = new Vector3(-19.2f, 0f, -10f);
     public Vector3 gamePosition = new Vector3(0f, 0f, -10f);
+    public Vector3 talePosition = new Vector3(-19.2f, -10.8f, -10f);
 
     private bool isMoving;
 
@@ -23,13 +24,23 @@ public class CameraMove : MonoBehaviour
 
     public void MoveToGame()
     {
-        if (!isMoving)
-            StartCoroutine(MoveRoutine(gamePosition));
+        StartMove(gamePosition);
+    }
+
+    public void MoveToTale()
+    {
+        StartMove(talePosition);
     }
 
     public IEnumerator MoveToStartRoutine()
     {
         yield return MoveRoutine(startPosition);
+    }
+
+    void StartMove(Vector3 target)
+    {
+        StopAllCoroutines();
+        StartCoroutine(MoveRoutine(target));
     }
 
     IEnumerator MoveRoutine(Vector3 target)

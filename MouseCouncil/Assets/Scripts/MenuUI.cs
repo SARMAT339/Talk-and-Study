@@ -18,6 +18,9 @@ public class MenuUI : MonoBehaviour
 
     private GameObject mainMenuPanel;
     private GameObject aboutPanel;
+    private GameObject talePanel;
+    private RectTransform taleProgressFillRect;
+    private TextMeshProUGUI talePlayPauseLabel;
     private TMP_FontAsset uiFont;
     private Canvas canvas;
 
@@ -34,6 +37,7 @@ public class MenuUI : MonoBehaviour
         ResolveFont();
         BuildMainMenu();
         BuildAboutScreen();
+        BuildTaleScreen();
     }
 
     void ResolveFont()
@@ -45,26 +49,43 @@ public class MenuUI : MonoBehaviour
 
     public void ShowMainMenu()
     {
-        if (aboutPanel != null)
-            aboutPanel.SetActive(false);
-        if (mainMenuPanel != null)
-            mainMenuPanel.SetActive(true);
+        SetPanel(aboutPanel, false);
+        SetPanel(talePanel, false);
+        SetPanel(mainMenuPanel, true);
     }
 
     public void ShowAbout()
     {
-        if (mainMenuPanel != null)
-            mainMenuPanel.SetActive(false);
-        if (aboutPanel != null)
-            aboutPanel.SetActive(true);
+        SetPanel(mainMenuPanel, false);
+        SetPanel(talePanel, false);
+        SetPanel(aboutPanel, true);
+    }
+
+    public void ShowTale()
+    {
+        SetPanel(mainMenuPanel, false);
+        SetPanel(aboutPanel, false);
+        SetPanel(talePanel, true);
+        RefreshTaleControls();
     }
 
     public void HideAll()
     {
-        if (mainMenuPanel != null)
-            mainMenuPanel.SetActive(false);
-        if (aboutPanel != null)
-            aboutPanel.SetActive(false);
+        SetPanel(mainMenuPanel, false);
+        SetPanel(aboutPanel, false);
+        SetPanel(talePanel, false);
+    }
+
+    static void SetPanel(GameObject panel, bool visible)
+    {
+        if (panel != null)
+            panel.SetActive(visible);
+    }
+
+    void Update()
+    {
+        if (talePanel != null && talePanel.activeSelf)
+            RefreshTaleControls();
     }
 
     void BuildMainMenu()
@@ -81,9 +102,9 @@ public class MenuUI : MonoBehaviour
             new Vector2(0.25f, 0.38f), new Vector2(0.75f, 0.5f),
             () => GameManager.Instance.EnterAboutScreen());
 
-        CreateButton(mainMenuPanel.transform, "ExitButton", "Выход",
+        CreateButton(mainMenuPanel.transform, "ListenTaleButton", "Прослушать сказку",
             new Vector2(0.25f, 0.24f), new Vector2(0.75f, 0.36f),
-            () => GameManager.Instance.ExitGame());
+            () => GameManager.Instance.EnterTaleScreen());
     }
 
     void BuildAboutScreen()
@@ -141,20 +162,118 @@ public class MenuUI : MonoBehaviour
         scroll.content = contentRect;
 
         CreateButton(aboutPanel.transform, "BackButton", "Вернуться в меню",
-            new Vector2(0.08f, 0.08f), new Vector2(0.48f, 0.18f),
+            new Vector2(0.25f, 0.08f), new Vector2(0.75f, 0.18f),
             () => GameManager.Instance.EnterMainMenu());
-
-        CreateButton(aboutPanel.transform, "AboutExitButton", "Выход",
-            new Vector2(0.52f, 0.08f), new Vector2(0.92f, 0.18f),
-            () => GameManager.Instance.ExitGame());
 
         aboutPanel.SetActive(false);
     }
 
+    void BuildTaleScreen()
+    {
+        Transform taleCanvas = CreateTaleWorldCanvas();
+        talePanel = CreatePanel(taleCanvas, "TalePanel", Color.clear);
+        Image panelImage = talePanel.GetComponent<Image>();
+        if (panelImage != null)
+            panelImage.raycastTarget = false;
+
+        CreateTitle(talePanel.transform, "Прослушивание сказки", new Vector2(0.08f, 0.82f), new Vector2(0.92f, 0.96f), 40);
+
+        Button playPauseButton = CreateButton(talePanel.transform, "TalePlayPauseButton", "Пауза",
+            new Vector2(0.08f, 0.5f), new Vector2(0.48f, 0.64f),
+            () => GameManager.Instance.ToggleTalePlayback(),
+            28);
+        talePlayPauseLabel = playPauseButton.GetComponentInChildren<TextMeshProUGUI>();
+
+        CreateButton(talePanel.transform, "TaleRestartButton", "Заново",
+            new Vector2(0.52f, 0.5f), new Vector2(0.92f, 0.64f),
+            () => GameManager.Instance.RestartTale(),
+            28);
+
+        CreateProgressBar(talePanel.transform);
+
+        CreateButton(talePanel.transform, "TaleBackButton", "Вернуться в меню",
+            new Vector2(0.25f, 0.08f), new Vector2(0.75f, 0.2f),
+            () => GameManager.Instance.EnterMainMenu());
+
+        talePanel.SetActive(false);
+    }
+
+    Transform CreateTaleWorldCanvas()
+    {
+        GameObject taleCanvasObject = new GameObject("TaleCanvas");
+        Canvas taleCanvas = taleCanvasObject.AddComponent<Canvas>();
+        taleCanvas.renderMode = RenderMode.WorldSpace;
+        taleCanvas.worldCamera = Camera.main;
+        taleCanvas.sortingOrder = 1;
+        taleCanvas.additionalShaderChannels =
+            AdditionalCanvasShaderChannels.TexCoord1 |
+            AdditionalCanvasShaderChannels.Normal |
+            AdditionalCanvasShaderChannels.Tangent;
+
+        RectTransform sourceRect = canvas.GetComponent<RectTransform>();
+        RectTransform taleRect = taleCanvasObject.GetComponent<RectTransform>();
+        taleRect.sizeDelta = sourceRect.sizeDelta;
+        taleRect.localScale = sourceRect.localScale;
+        taleRect.position = new Vector3(-19.2f, -11f, sourceRect.position.z);
+
+        taleCanvasObject.AddComponent<GraphicRaycaster>();
+        return taleCanvasObject.transform;
+    }
+
+    void CreateProgressBar(Transform parent)
+    {
+        GameObject bar = new GameObject("TaleProgressBar");
+        bar.transform.SetParent(parent, false);
+
+        RectTransform barRect = bar.AddComponent<RectTransform>();
+        barRect.anchorMin = new Vector2(0.1f, 0.32f);
+        barRect.anchorMax = new Vector2(0.9f, 0.42f);
+        barRect.offsetMin = Vector2.zero;
+        barRect.offsetMax = Vector2.zero;
+
+        Image background = bar.AddComponent<Image>();
+        background.color = new Color(0.12f, 0.12f, 0.12f, 0.9f);
+
+        GameObject fillObject = new GameObject("Fill");
+        fillObject.transform.SetParent(bar.transform, false);
+
+        taleProgressFillRect = fillObject.AddComponent<RectTransform>();
+        taleProgressFillRect.anchorMin = Vector2.zero;
+        taleProgressFillRect.anchorMax = new Vector2(0f, 1f);
+        taleProgressFillRect.offsetMin = new Vector2(4f, 4f);
+        taleProgressFillRect.offsetMax = new Vector2(-4f, -4f);
+        taleProgressFillRect.pivot = new Vector2(0f, 0.5f);
+
+        Image fillImage = fillObject.AddComponent<Image>();
+        fillImage.color = new Color(0.35f, 0.75f, 0.4f, 1f);
+        fillImage.raycastTarget = false;
+    }
+
+    void RefreshTaleControls()
+    {
+        SoundsController sounds = GameManager.Instance != null
+            ? GameManager.Instance.Sounds
+            : null;
+
+        if (taleProgressFillRect != null)
+        {
+            float progress = sounds != null ? sounds.TaleProgress : 0f;
+            taleProgressFillRect.anchorMax = new Vector2(progress, 1f);
+        }
+
+        if (talePlayPauseLabel != null)
+            talePlayPauseLabel.text = sounds != null && sounds.IsTalePlaying ? "Пауза" : "Продолжить";
+    }
+
     GameObject CreatePanel(string name, Color color)
     {
+        return CreatePanel(canvas.transform, name, color);
+    }
+
+    GameObject CreatePanel(Transform parent, string name, Color color)
+    {
         GameObject panel = new GameObject(name);
-        panel.transform.SetParent(canvas.transform, false);
+        panel.transform.SetParent(parent, false);
 
         RectTransform rect = panel.AddComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;
@@ -189,7 +308,7 @@ public class MenuUI : MonoBehaviour
             label.font = uiFont;
     }
 
-    void CreateButton(Transform parent, string name, string label, Vector2 anchorMin, Vector2 anchorMax, UnityEngine.Events.UnityAction onClick)
+    Button CreateButton(Transform parent, string name, string label, Vector2 anchorMin, Vector2 anchorMax, UnityEngine.Events.UnityAction onClick, float fontSize = 28f)
     {
         GameObject buttonObject = new GameObject(name);
         buttonObject.transform.SetParent(parent, false);
@@ -218,10 +337,12 @@ public class MenuUI : MonoBehaviour
 
         TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
         text.text = label;
-        text.fontSize = 28;
+        text.fontSize = fontSize;
         text.alignment = TextAlignmentOptions.Center;
         text.color = Color.white;
         if (uiFont != null)
             text.font = uiFont;
+
+        return button;
     }
 }
